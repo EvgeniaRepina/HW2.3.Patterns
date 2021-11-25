@@ -1,62 +1,63 @@
 package ru.netology.web.test;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Configuration;
 import com.github.javafaker.Faker;
 import com.github.javafaker.PhoneNumber;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import ru.netology.web.data.DataGenerator;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Locale;
 
+import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.withText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
-
+import static com.codeborne.selenide.Selenide.*;
 
 class CardDeliveryTest {
 
     @Test
-    void shouldBookingACard() throws InterruptedException {
+    void shouldBookingACard() {
         Faker faker = new Faker(new Locale("RU"));
 
         String name = faker.name().fullName();
         String city = faker.address().city();
         PhoneNumber phone = faker.phoneNumber();
-//        Date date = faker.date().future(10, 5, DAYS);
-
+        String planningDate1 = LocalDate.now().plusDays(4).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        String planningDate2 = LocalDate.now().plusDays(5).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
         open("http://localhost:9999");
         $("[data-test-id='city']  input").setValue(city);
-
-        String text = $("[formnovalidate][view]").getAttribute("value");
-//        $("[data-test-id='date']  input").clear();
-//        $("[data-test-id='date']  input").setValue(String.valueOf(text));
-        LocalDate text2 = LocalDate.now().plusYears(1);
-
+        $("[data-test-id='date']  input").doubleClick().sendKeys(Keys.BACK_SPACE);
+        $("[data-test-id='date']  input").setValue(planningDate1);
         $("[data-test-id='name']  input").setValue(name);
         $("[data-test-id='phone']  input").setValue(phone.phoneNumber());
         $("[data-test-id='agreement']").click();
         $(".grid-col button[role='button']").click();
 
         $(withText("Успешно!")).shouldBe(visible);
-        Assertions.assertTrue($(withText("Встреча успешно запланирована на")).exists());
-        Assertions.assertTrue($(By.cssSelector(".notification__content")).shouldHave(Condition.text(text)).exists());
+      $(".notification__content").shouldBe(visible).shouldHave(exactText("Встреча успешно забронирована на " + planningDate1));
 
-//        String text2 = $("[formnovalidate][view]").getAttribute("value");
-//        $("[data-test-id='date']  input").setValue(text2);
-
-        $(".form-field > span > span> input").setValue(String.valueOf(text2));
+        $("[data-test-id='date']  input").doubleClick().sendKeys(Keys.BACK_SPACE);
+        $("[data-test-id='date']  input").setValue(planningDate2);
 
         $(".grid-col button[role='button']").click();
-        Assertions.assertTrue($(withText("У вас уже запланирована встреча на другую дату. Перепланировать?")).exists());
+      $("[data-test-id=replan-notification] .notification__content").shouldBe(visible).shouldHave(exactText("У вас " +
+              "уже запланирована встреча на другую дату. Перепланировать?"));
+
         $(".notification_status_error .button_view_extra").click();
 
         $(withText("Успешно!")).shouldBe(visible);
-        Assertions.assertTrue($(withText("Встреча успешно запланирована на")).exists());
-//        Assertions.assertTrue($(By.cssSelector(".notification__content")).shouldHave(Condition.text(String.valueOf(text2))).exists());
+     $("[data-test-id='success-notification'] .notification__content").shouldBe(visible).shouldHave
+     (exactText("Встреча успешно забронирована на " + planningDate2));
 
 
     }

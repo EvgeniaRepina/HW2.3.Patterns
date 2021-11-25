@@ -16,4 +16,5 @@ build_script:
   - chmod +x gradlew # даем права доступа к файлу gradlew
   #  Для selenide headless режим активируется при запуске тестов с параметром:
   - ./gradlew test -Dselenide.headless=true --info
+#  - ./gradlew test -Dselenide.browser=firefox
 #  - ./gradlew test --info  # запускаем тест, флаг --info позволяет выводить больше информации

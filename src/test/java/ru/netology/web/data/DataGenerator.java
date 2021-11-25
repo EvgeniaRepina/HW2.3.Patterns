@@ -1,34 +1,38 @@
-//package ru.netology.web.data;
-//
-//import com.github.javafaker.Faker;
-//import lombok.Value;
-//import lombok.val;
-//
-//import java.time.LocalDate;
-//import java.time.format.DateTimeFormatter;
-//import java.util.Locale;
-//import java.util.Random;
-//
-//public class DataGenerator {
-//    private static String date; //мое
-//    private static String city; //мое
-//    private static String name; //мое
-//    private static String phone; //мое
-//
-//
+package ru.netology.web.data;
+
+import com.github.javafaker.Faker;
+import lombok.Value;
+import lombok.val;
+
+import java.time.LocalDate;
+import java.time.chrono.IsoChronology;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.ResolverStyle;
+import java.time.format.SignStyle;
+import java.util.Locale;
+import java.util.Random;
+
+import static java.time.temporal.ChronoField.*;
+
+public class DataGenerator {
+
 //
 //    private DataGenerator() {
 //    }
 //
 //    public static String generateDate(int shift) {
+//
 //        // TODO: добавить логику для объявления переменной date и задания её значения, для генерации строки с датой
 //        // Вы можете использовать класс LocalDate и его методы для получения и форматирования даты
 //        return date;
 //    }
 //
 //    public static String generateCity(String locale) {
+//
 //        // TODO: добавить логику для объявления переменной city и задания её значения, генерацию можно выполнить
 //        // с помощью Faker, либо используя массив валидных городов и класс Random
+//
 //        return city;
 //    }
 //
@@ -61,4 +65,4 @@
 //        String name;
 //        String phone;
 //    }
-//}
+}
