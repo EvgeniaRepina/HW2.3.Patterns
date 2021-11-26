@@ -1,20 +1,12 @@
 package ru.netology.web.test;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Configuration;
 import com.github.javafaker.Faker;
 import com.github.javafaker.PhoneNumber;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import ru.netology.web.data.DataGenerator;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Locale;
 
 import static com.codeborne.selenide.Condition.exactText;
@@ -29,7 +21,8 @@ class CardDeliveryTest {
         Faker faker = new Faker(new Locale("RU"));
 
         String name = faker.name().fullName();
-        String city = faker.address().city();
+//        String city = faker.address().city();
+        String city = Cities.getRandomCity();
         PhoneNumber phone = faker.phoneNumber();
         String planningDate1 = LocalDate.now().plusDays(4).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         String planningDate2 = LocalDate.now().plusDays(5).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
@@ -44,20 +37,26 @@ class CardDeliveryTest {
         $(".grid-col button[role='button']").click();
 
         $(withText("Успешно!")).shouldBe(visible);
-      $(".notification__content").shouldBe(visible).shouldHave(exactText("Встреча успешно забронирована на " + planningDate1));
+        $(withText("Встреча успешно запланирована на")).shouldBe(visible);
+        $(withText(planningDate1)).shouldBe(visible);
+//      $(".notification__content").shouldBe(visible).shouldHave(exactText("Встреча успешно запланирована на " + planningDate1));
 
         $("[data-test-id='date']  input").doubleClick().sendKeys(Keys.BACK_SPACE);
         $("[data-test-id='date']  input").setValue(planningDate2);
 
         $(".grid-col button[role='button']").click();
-      $("[data-test-id=replan-notification] .notification__content").shouldBe(visible).shouldHave(exactText("У вас " +
-              "уже запланирована встреча на другую дату. Перепланировать?"));
+
+        $(withText("У вас уже запланирована встреча на другую дату. Перепланировать?")).shouldBe(visible);
+//      $("[data-test-id=replan-notification] .notification__content").shouldBe(visible).shouldHave(exactText("У вас " +
+//              "уже запланирована встреча на другую дату. Перепланировать?"));
 
         $(".notification_status_error .button_view_extra").click();
 
         $(withText("Успешно!")).shouldBe(visible);
-     $("[data-test-id='success-notification'] .notification__content").shouldBe(visible).shouldHave
-     (exactText("Встреча успешно забронирована на " + planningDate2));
+        $(withText("Встреча успешно запланирована на")).shouldBe(visible);
+        $(withText(planningDate2)).shouldBe(visible);
+//     $("[data-test-id='success-notification'] .notification__content").shouldBe(visible).shouldHave
+//     (exactText("Встреча успешно забронирована на " + planningDate2));
 
 
     }
