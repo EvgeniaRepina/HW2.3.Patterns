@@ -11,6 +11,4 @@ public class Cities {
 
         return arr[randomNumber];
     }
-
-
 }
