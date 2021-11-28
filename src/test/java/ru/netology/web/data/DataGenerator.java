@@ -12,13 +12,8 @@ public class DataGenerator {
     private DataGenerator() {
     }
 
-    public static String generateFirstDate() {
-        String date = LocalDate.now().plusDays(4).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        return date;
-    }
-
-    public static String generateSecondDate() {
-        String date = LocalDate.now().plusDays(5).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    public static String generateDate(int days) {
+        String date = LocalDate.now().plusDays(days).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         return date;
     }
 
